@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   web:
     build:
       context: ../flask_site
@@ -11,15 +10,17 @@ services:
       FLASK_ENV: development
 
   tests:
-    command: pytest --executor browser --app_host http://web
+    command: pytest --executor chrome --app_host web
     build:
       context: ../tests
       dockerfile: Dockerfile
     depends_on:
       - web
-      - browser
+      - chrome
 
-  browser:
-    image: selenium/standalone-chrome:4.0.0-alpha-7-prerelease-20200921
+  chrome:
+    image: selenium/standalone-chrome
+    volumes:
+      - /dev/shm:/dev/shm
     ports:
       - "4444:4444"
